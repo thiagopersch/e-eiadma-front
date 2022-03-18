@@ -1,14 +1,14 @@
 import { useRef, useState } from 'react';
 import { getSession, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-/* import { FormHandles } from '@unform/core'; */
+import { FormHandles } from '@unform/core';
 import { ValidationError } from 'yup';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 
 import Heading from 'components/Heading';
 import Button from 'components/Button';
-import TextInput from 'components/TextInput';
+import Input from 'components/Input';
 
 import { useApi } from 'services/api';
 
@@ -94,12 +94,12 @@ const ChangePassword = () => {
         </span>
 
         <S.Form onSubmit={handleSubmit} ref={formRef}>
-          <TextInput
+          <Input
             name="newPassword"
             label="Digite sua nova senha"
             type="password"
           />
-          <TextInput
+          <Input
             name="passwordConfirmation"
             label="Confirme sua nova senha"
             type="password"

@@ -4,7 +4,7 @@ import { Form as Unform } from '@unform/web';
 import SectionContent from 'components/SectionContent';
 import Heading from 'components/Heading';
 
-import * as InputStyles from 'components/TextInput/styles';
+import * as InputStyles from 'components/Input/styles';
 
 export const Wrapper = styled.main`
   ${({ theme }) => css`
