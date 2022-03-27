@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getSession, signIn } from 'next-auth/client';
+import { getSession, signIn } from 'next-auth/react';
 import { ValidationError } from 'yup';
 import { FormHandles } from '@unform/core';
 import { toast } from 'react-toastify';
@@ -10,6 +10,7 @@ import Heading from 'components/Heading';
 import Button from 'components/Button';
 
 import { signInSchema } from './rules/schema';
+import { SYSTEMBACKGROUND } from 'models/SYSTEMBACKGROUND';
 
 import * as S from './styles';
 
@@ -18,7 +19,11 @@ export type SigninFormData = {
   PASSWORD: string;
 };
 
-const SignIn = () => {
+export type SignInProps = {
+  background?: SYSTEMBACKGROUND;
+};
+
+const SignIn = ({ background }: SignInProps) => {
   const [loading, setLoading] = useState(false);
 
   const { push, query } = useRouter();
@@ -35,7 +40,7 @@ const SignIn = () => {
       });
 
       const callbackUrl = `${window.location.origin}${
-        query?.callbackUrl || ''
+        query?.callbackUrl || '/auth'
       }`;
       const result = await signIn('credentials', {
         ...values,
@@ -52,7 +57,7 @@ const SignIn = () => {
       const session = await getSession({});
 
       if (session?.GUSERS.CHANGE_PASSWORD) {
-        return push(`/change-password?callbackUrl=${callbackUrl}`);
+        return push(`/auth/change-password?callbackUrl=${callbackUrl}`);
       }
 
       if (result?.url) {
@@ -80,11 +85,22 @@ const SignIn = () => {
   };
 
   return (
-    <S.Wrapper>
+    <S.Wrapper hasBackground={!!background}>
+      {background && (
+        <S.Background
+          src={`/img/backgrounds/${background.NAME}`}
+          layout="fill"
+          objectFit="cover"
+          quality={80}
+          placeholder="blur"
+          blurDataURL={background.BLURHASH}
+        />
+      )}
+
       <S.Content>
         <Heading>Faça seu login</Heading>
         <S.Form onSubmit={handleSubmit} ref={formRef}>
-          <Input name="email" label="Digite seu email" />
+          <Input name="email" label="Digite seu CPF" />
           <Input name="password" label="Digite sua senha" type="password" />
           <Button styleType="rounded" size="large" disabled={loading}>
             {loading ? 'Entrando...' : 'Entrar'}

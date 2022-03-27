@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { getSession, useSession } from 'next-auth/client';
+import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { FormHandles } from '@unform/core';
 import { ValidationError } from 'yup';
@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 import Heading from 'components/Heading';
 import Button from 'components/Button';
-import Input from 'components/Input';
+import TextInput from 'components/Input';
 
 import { useApi } from 'services/api';
 
@@ -24,7 +24,7 @@ type ChangePasswordFormData = {
 const ChangePassword = () => {
   const [loading, setLoading] = useState(false);
 
-  const [session] = useSession();
+  const { data: session } = useSession();
   const api = useApi(session);
 
   const formRef = useRef<FormHandles>(null);
@@ -37,18 +37,24 @@ const ChangePassword = () => {
 
       await changePasswordSchema.validate(values, { abortEarly: false });
 
-      await api.put(`/users/${session?.ID}/password`, {
+      await api.put(`/users/${session?.id}/password`, {
         password: values.newPassword
       });
 
+      await signIn('refresh', {
+        profileId: session?.profileId,
+        token: session?.jwt,
+        redirect: false
+      });
+
       // update session
-      await getSession({});
+      // await getSession({});
 
       toast.success('Senha criada com sucesso.', {
         position: toast.POSITION.TOP_RIGHT
       });
 
-      return push(`${query?.callbackUrl || ''}`);
+      return push(`${query?.callbackUrl || '/auth'}`);
     } catch (err) {
       if (err instanceof ValidationError) {
         const validationErrors: Record<string, string> = {};
@@ -94,12 +100,12 @@ const ChangePassword = () => {
         </span>
 
         <S.Form onSubmit={handleSubmit} ref={formRef}>
-          <Input
+          <TextInput
             name="newPassword"
             label="Digite sua nova senha"
             type="password"
           />
-          <Input
+          <TextInput
             name="passwordConfirmation"
             label="Confirme sua nova senha"
             type="password"

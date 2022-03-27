@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 
 import Base from 'templates/Base';
 
@@ -10,7 +10,7 @@ import { useCountUsers } from 'requests/queries/users';
 import * as S from './styles';
 
 const AdminDashboard = () => {
-  const [session] = useSession();
+  const { data: session } = useSession();
 
   const { data: usersCount } = useCountUsers(session);
 

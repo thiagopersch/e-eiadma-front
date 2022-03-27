@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { Session } from 'next-auth';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 
 import Loading from 'templates/Loading';
 
@@ -37,7 +37,7 @@ const AccessProvider = ({ children, access }: AccessProviderProps) => {
   const [accessModules, setAccessModules] = useState<GACCESSUSERSMODULES[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const [session] = useSession();
+  const { data: session } = useSession();
 
   useEffect(() => {
     async function loadAccessModules() {

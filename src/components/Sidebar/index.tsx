@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -11,7 +11,7 @@ import * as S from './styles';
 const Sidebar = () => {
   const { pathname } = useRouter();
 
-  const [session] = useSession();
+  const { data: session } = useSession();
   const routes = useMemo(() => {
     if (session?.ACCESSLEVELS?.CODE === 'ADMINISTRADOR') return ADMINISTRADOR;
 

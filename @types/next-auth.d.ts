@@ -19,10 +19,13 @@ declare module 'next-auth' {
     ID: string;
     ACCESSLEVELS?: GACCESSLEVELS;
     PROFILE_ID?: string;
-    /* schoolId?: string;
-    configs: {
-      school_year_id: string;
-    }; */
+    CLASSID?: string;
+    CLASS: {
+      nameClass: string;
+    };
+    EBD: {
+      EBD_ID: string;
+    };
   }
 }
 

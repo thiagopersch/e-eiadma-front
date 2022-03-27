@@ -1,23 +1,21 @@
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 
 import AdminDashboard from 'templates/AdminDashboard';
 
-/* export type DashboardProps = SchoolAdministrationDashboardProps | never; */
+import EBDAdministrationDashboard, {
+  EBDAdministrationDashboardProps
+} from 'templates/EBDAdministrationDashboard';
 
-const Dashboard = (/* props: DashboardProps */) => {
-  const [session] = useSession();
+export type DashboardProps = EBDAdministrationDashboardProps | never;
 
-  /*   if (session?.branch.type === 'MUNICIPAL_SECRETARY') {
-    return <MunicipalSecretaryDashboard />;
-  }
-  if (session?.accessLevel?.code === 'teacher') {
-    return <TeacherDashboard {...props} />;
-  } */
+const Dashboard = (props: DashboardProps) => {
+  const { data: session } = useSession();
+
   if (session?.ACCESSLEVELS?.CODE === 'ADMINISTRADOR') {
     return <AdminDashboard />;
   }
 
-  /* return <SchoolAdministrationDashboard {...props} />; */
+  return <EBDAdministrationDashboard {...props} />;
 };
 
 export default Dashboard;

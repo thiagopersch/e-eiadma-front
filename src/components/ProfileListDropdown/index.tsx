@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { signIn, useSession } from 'next-auth/client';
+import { signIn, useSession } from 'next-auth/react';
 
 import { useListUserProfiles } from 'requests/queries/user-profile';
 
@@ -8,7 +8,7 @@ import * as S from './styles';
 const ProfileListDropdown = () => {
   const [open, setOpen] = useState(false);
 
-  const [session] = useSession();
+  const { data: session } = useSession();
   const { data: userProfiles } = useListUserProfiles(session, {
     GUSERS_ID: session?.ID
   });

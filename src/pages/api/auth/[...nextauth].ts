@@ -5,30 +5,9 @@ import { AxiosInstance } from 'axios';
 import { Credentials, Refresh } from 'providers';
 
 import { GECCLESIASTICALFIELD } from 'models/GECCLESIASTICALFIELD';
-/* import { SchoolYear } from 'models/SchoolYear';
-import { Employee } from 'models/Employee';
-import { School } from 'models/School'; */
 
 import { initializeApi } from 'services/api';
 
-/* const getEmployee = async (api: AxiosInstance, token?: string) => {
-  return await api
-    .get<Employee>(`/employees/me`, {
-      headers: { authorization: token ? `Bearer ${token}` : '' }
-    })
-    .then((response) => response.data)
-    .catch(() => undefined);
-};
-
-const getSchool = async (api: AxiosInstance, token?: string) => {
-  return api
-    .get<School>('/schools/me', {
-      headers: { authorization: token ? `Bearer ${token}` : '' }
-    })
-    .then((response) => response.data)
-    .catch(() => undefined);
-};
- */
 const getEcclesiasticalField = async (api: AxiosInstance, token?: string) => {
   return api
     .get<GECCLESIASTICALFIELD>('/app/ecclesiastical-field/me', {
@@ -54,23 +33,19 @@ const refreshProvider = Refresh({
       );
 
       const { data } = response;
-      if (data.user) {
-        const [/* employee, school, */ ecclesiasticalField] = await Promise.all(
-          [
-            /* getEmployee(api, data.token),
-          getSchool(api, data.token), */
-            getEcclesiasticalField(api, data.token)
-          ]
-        );
+      if (data.GUSERS) {
+        const [GECCLESIASTICALFIELD] = await Promise.all([
+          getEcclesiasticalField(api, data.token)
+        ]);
 
         return {
-          ...data.user,
+          ...data.GUSERS,
           NAME: data.GUSERS.NAME,
           JWT: data.token,
-          PROFILE_ID: data.profile.id,
-          ACCESSLEVELS: data.profile.accessLevel,
-          GECCLESIASTICALFIELD_ID: ecclesiasticalField?.ID,
-          GECCLESIASTICALFIELD_TYPE: ecclesiasticalField?.TYPE
+          /* PROFILE_ID: data.profile.id,
+          ACCESSLEVELS: data.profile.accessLevel, */
+          GECCLESIASTICALFIELD_ID: GECCLESIASTICALFIELD?.ID,
+          GECCLESIASTICALFIELD_TYPE: GECCLESIASTICALFIELD?.TYPE
         };
       }
 
@@ -84,33 +59,27 @@ const refreshProvider = Refresh({
 const signInProvider = Credentials({
   name: 'sign-in',
   credentials: {},
-  async authorize({ email, password }: Record<string, string>) {
+  async authorize({ EMAIL, PASSWORD }: Record<string, string>) {
     const api = initializeApi();
 
     try {
       const response = await api.post(`/sessions`, {
-        login: email,
-        password
+        EMAIL,
+        PASSWORD
       });
 
       const { data } = response;
-      if (data.user) {
-        const [/* employee, school, */ ecclesiasticalField] = await Promise.all(
-          [
-            /* getEmployee(api, data.token),
-          getSchool(api, data.token), */
-            getEcclesiasticalField(api, data.token)
-          ]
-        );
+      if (data.GUSERS) {
+        const [GECCLESIASTICALFIELD] = await Promise.all([
+          getEcclesiasticalField(api, data.token)
+        ]);
 
         return {
-          ...data.user,
+          ...data.GUSERS,
           NAME: data.GUSERS.NAME,
           JWT: data.token,
-          PROFILE_ID: data.profile.id,
-          ACCESSLEVELS: data.profile.accessLevel,
-          GECCLESIASTICALFIELD_ID: ecclesiasticalField?.ID,
-          GECCLESIASTICALFIELD_TYPE: ecclesiasticalField?.TYPE
+          GECCLESIASTICALFIELD_ID: GECCLESIASTICALFIELD?.ID,
+          GECCLESIASTICALFIELD_TYPE: GECCLESIASTICALFIELD?.TYPE
         };
       }
     } catch (err) {
@@ -138,21 +107,7 @@ const options = {
 
       const sessionConfigs: Record<string, string | undefined> = {};
 
-      /* try {
-        const { data } = await api.get<SchoolYear>(
-          '/education/admin/school-years/current',
-          {
-            headers: { authorization: user.jwt ? `Bearer ${user.jwt}` : '' }
-          }
-        );
-
-        sessionConfigs.school_year_id = data?.id;
-      } catch {
-        sessionConfigs.school_year_id = undefined;
-      } */
-
       const {
-        /* schoolId, */
         PROFILE_ID,
         ACCESSLEVELS,
         JWT,
@@ -169,7 +124,6 @@ const options = {
       };
       session.profileId = PROFILE_ID;
       session.accessLevel = ACCESSLEVELS;
-      /* session.schoolId = schoolId; */
       session.ecclesiasticalField = {
         ID: GECCLESIASTICALFIELD_ID,
         TYPE: GECCLESIASTICALFIELDTYPE
@@ -180,13 +134,11 @@ const options = {
     },
     jwt: async (token: any, user: any) => {
       if (user) {
-        token.id = user.id;
-        token.email = user.email;
-        token.jwt = user.jwt;
+        token.ID = user.ID;
+        token.EMAIL = user.EMAIL;
+        token.JWT = user.JWT;
         token.profileId = user.PROFILE_ID;
         token.accessLevel = user.ACCESSLEVELS;
-        /* token.schoolId = user.schoolId;
-        token.employeeId = user.employeeId;*/
         token.GECCLESIASTICALFIELD_ID = user.GECCLESIASTICALFIELD_ID;
         token.GECCLESIASTICALFIELD_TYPE = user.GECCLESIASTICALFIELD_TYPE;
       }

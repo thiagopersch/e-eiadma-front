@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
-import { Provider as AuthProvider } from 'next-auth/client';
+import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'styled-components';
 
 import { AtomProvider, AtomHydrator } from 'hooks/AtomProvider';
@@ -27,14 +27,14 @@ type AppProps = NextAppProps & {
 };
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <AuthProvider session={pageProps.session}>
+    <SessionProvider session={pageProps.session}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <AtomProvider initialState={pageProps.initialState}>
             <AtomHydrator initialState={pageProps.initialState}>
               <ThemeProvider theme={theme}>
                 <Head>
-                  <title>E-IEADMA</title>
+                  <title>Diário Online</title>
                 </Head>
                 <GlobalStyles />
                 <NextNprogress
@@ -58,7 +58,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           </AtomProvider>
         </Hydrate>
       </QueryClientProvider>
-    </AuthProvider>
+    </SessionProvider>
   );
 };
 

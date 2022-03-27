@@ -8,14 +8,7 @@ export default function ChangePasswordPage() {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await protectedRoutes(context, { validateChangePass: false });
+  const session = await protectedRoutes(context);
 
-  if (session && !session.GUSERS.CHANGE_PASSWORD) {
-    const location = context.query.callbackUrl || '/';
-
-    context.res.writeHead(302, { Location: location });
-    context.res.end();
-  }
-
-  return { props: {} };
+  return { props: { session } };
 }
