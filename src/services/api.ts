@@ -15,7 +15,7 @@ import { toast, Flip, ToastContent } from 'react-toastify';
 const isServer = typeof window === 'undefined';
 
 const createApi = (session?: Session | null) => {
-  const jwt = session?.jwt;
+  const jwt = session?.JWT;
 
   const api = axios.create({
     baseURL: isServer

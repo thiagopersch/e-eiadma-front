@@ -17,7 +17,7 @@ async function protectedRoutes(
       Location: `/sign-in?callbackUrl=${context.resolvedUrl}`
     });
     context.res.end();
-  } else if (options?.validateChangePass && session.GUSERS.CHANGE_PASSWORD) {
+  } else if (options?.validateChangePass && session.USER.CHANGE_PASSWORD) {
     context.res.writeHead(302, {
       Location: `/change-password?callbackUrl=${context.resolvedUrl}`
     });

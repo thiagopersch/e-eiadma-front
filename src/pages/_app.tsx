@@ -34,7 +34,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <AtomHydrator initialState={pageProps.initialState}>
               <ThemeProvider theme={theme}>
                 <Head>
-                  <title>Diário Online</title>
+                  <title>E-IEADMA</title>
                 </Head>
                 <GlobalStyles />
                 <NextNprogress

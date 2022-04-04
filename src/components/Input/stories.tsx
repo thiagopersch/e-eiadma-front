@@ -9,7 +9,7 @@ export default {
   parameters: {
     layout: 'fullscreen',
     backgrounds: {
-      default: 'sema-white'
+      default: 'eiadma-white'
     }
   },
   argTypes: {

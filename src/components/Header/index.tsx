@@ -16,10 +16,7 @@ const Header = () => {
         <ProfileListDropdown />
       </S.ProfileContainer>
       <div style={{ height: '100%' }}>
-        <UserDropdown
-          name={session?.GUSERS.NAME || ''}
-          image="/img/user2.png"
-        />
+        <UserDropdown name={session?.USER.NAME || ''} image="/img/user2.png" />
       </div>
     </S.Wrapper>
   );

@@ -6,7 +6,7 @@ import { GACCESSLEVELS } from 'models/GACCESSLEVELS';
 
 declare module 'next-auth' {
   interface Session {
-    GUSERS: {
+    USER: {
       NAME: string;
       EMAIL: string;
       CHANGE_PASSWORD: boolean;
@@ -27,10 +27,39 @@ declare module 'next-auth' {
       EBD_ID: string;
     };
   }
+
+  interface User {
+    ID: string;
+    EMAIL: string;
+    JWT: string;
+    NAME: string;
+    CHANGE_PASSWORD: boolean;
+    PROFILE_ID: string;
+    ACCESSLEVELS: GACCESSLEVELS;
+    GECCLESIASTICALFIELD_ID: string;
+    GECCLESIASTICALFIELD_TYPE: 'HEADQUARTER' | 'CONGREGATION';
+  }
 }
 
-declare module 'next-auth/client' {
-  export type CustomRedirectableProvider = RedirectableProvider | 'refresh';
+declare module 'next-auth/jwt' {
+  interface JWT {
+    ID: string;
+    EMAIL: string;
+    JWT: string;
+    NAME: string;
+    CHANGE_PASSWORD: boolean;
+    PROFILE_ID: string;
+    ACCESSLEVELS: GACCESSLEVELS;
+    GECCLESIASTICALFIELD_ID: string;
+    GECCLESIASTICALFIELD_TYPE: 'HEADQUARTER' | 'CONGREGATION';
+  }
+}
+
+declare module 'next-auth/react' {
+  export type CustomRedirectableProvider =
+    | RedirectableProvider
+    | 'refresh'
+    | 'manualsignout';
 
   export function signIn<P extends SignInProvider = undefined>(
     provider?: P,

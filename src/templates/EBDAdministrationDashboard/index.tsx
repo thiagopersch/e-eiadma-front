@@ -5,21 +5,17 @@ import Base from 'templates/Base';
 import Card from 'components/Card';
 
 import { EEBD } from 'models/EEBD';
-import { useListEBD } from 'requests/queries/ebd';
+import { useGetEBD } from 'requests/queries/ebd';
 
 import * as S from './styles';
 
-export type EBDAdministrationDashboardProps = {
-  EBD: EEBD;
-};
-const EBDAdministrationDashboard = ({
-  EBD
-}: EBDAdministrationDashboardProps) => {
+const EBDAdministrationDashboard = () => {
   const { data: session } = useSession();
 
-  const { data } = useListEBD(session, {
-    ID: EBD.ID
+  const { data: EBD } = useGetEBD(session, {
+    ID: 'me'
   });
+
   return (
     <Base>
       <S.Wrapper>

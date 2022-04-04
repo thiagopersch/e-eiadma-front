@@ -21,7 +21,7 @@ const ProfileListDropdown = () => {
   }, [userProfiles, session]);
 
   const profilesWithoutSelected = useMemo(() => {
-    if (!session?.profileId) return [];
+    if (!session?.PROFILE_ID) return [];
 
     return userProfiles?.filter((profile) => profile.ID !== session.PROFILE_ID);
   }, [userProfiles, session]);
@@ -30,10 +30,10 @@ const ProfileListDropdown = () => {
     setOpen((current) => !current);
   };
 
-  const handleClickItem = async (profileId: string) => {
+  const handleClickItem = async (PROFILE_ID: string) => {
     await signIn('refresh', {
-      profileId,
-      token: session?.jwt,
+      PROFILE_ID,
+      token: session?.JWT,
       redirect: false
     });
 

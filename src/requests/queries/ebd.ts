@@ -6,6 +6,10 @@ import { EBDMapper } from 'utils/mappers/EBDMapper';
 
 import { EEBD } from 'models/EEBD';
 
+type GetEBDFilters = {
+  ID?: string;
+};
+
 type ListEBDFilters = {
   ID?: string;
   DATE?: string;
@@ -14,25 +18,51 @@ type ListEBDFilters = {
   CALL_TIMEOUT?: Date;
 };
 
-export const listEBD = async (
-  session: Session | null,
-  filters: ListEBDFilters = {}
+type CountEBDResponse = {
+  count: number;
+};
+
+export const EBDKeys = {
+  all: 'EBD' as const,
+  lists: () => [...EBDKeys.all, 'list'] as const,
+  list: (filters: string) => [...EBDKeys.lists(), { filters }] as const,
+  shows: () => [...EBDKeys.all, 'shows'] as const,
+  show: (filters: string) => [...EBDKeys.shows(), { filters }] as const,
+  details: () => [...EBDKeys.all, 'details'] as const,
+  detail: (filters: string) => [...EBDKeys.details(), { filters }] as const,
+  counts: () => [...EBDKeys.all, 'counts'] as const,
+  count: (filters: string) => [...EBDKeys.counts(), { filters }] as const
+};
+
+export const getEBD = (
+  session?: Session | null,
+  filters: GetEBDFilters = {}
 ) => {
   const api = initializeApi(session);
 
-  const EBD = await api
-    .get<EEBD[]>('/EBD', { params: filters })
-    .then((response) => response.data);
+  const { ID } = filters;
 
-  return EBD ? EBD.map(EBDMapper) : [];
+  return api.get<EEBD>(`/EBD/${ID || 'me'}`).then((response) => response.data);
 };
 
-export const useListEBD = (
-  session: Session | null,
-  filters: ListEBDFilters
-) => {
-  const key = `list-EBD-${JSON.stringify(filters)}`;
-  const result = useQuery(key, () => listEBD(session, filters));
+export const countEBD = async (session?: Session | null) => {
+  const api = initializeApi(session);
 
-  return { ...result, key };
+  return api
+    .get<CountEBDResponse>('/EBD/count')
+    .then((response) => response.data)
+    .catch(() => undefined);
+};
+
+export const useGetEBD = (
+  session?: Session | null,
+  filters: GetEBDFilters = {}
+) => {
+  return useQuery<EEBD>(EBDKeys.show(JSON.stringify(filters)), () =>
+    getEBD(session, filters)
+  );
+};
+
+export const useCountSchools = (session?: Session | null) => {
+  return useQuery(EBDKeys.count(JSON.stringify({})), () => countEBD(session));
 };

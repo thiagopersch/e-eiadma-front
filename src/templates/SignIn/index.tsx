@@ -56,7 +56,7 @@ const SignIn = ({ background }: SignInProps) => {
 
       const session = await getSession({});
 
-      if (session?.GUSERS.CHANGE_PASSWORD) {
+      if (session?.USER.CHANGE_PASSWORD) {
         return push(`/auth/change-password?callbackUrl=${callbackUrl}`);
       }
 
@@ -100,8 +100,8 @@ const SignIn = ({ background }: SignInProps) => {
       <S.Content>
         <Heading>Faça seu login</Heading>
         <S.Form onSubmit={handleSubmit} ref={formRef}>
-          <Input name="email" label="Digite seu CPF" />
-          <Input name="password" label="Digite sua senha" type="password" />
+          <Input name="EMAIL" label="Digite seu email" />
+          <Input name="PASSWORD" label="Digite sua senha" type="password" />
           <Button styleType="rounded" size="large" disabled={loading}>
             {loading ? 'Entrando...' : 'Entrar'}
           </Button>

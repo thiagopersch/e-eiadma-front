@@ -37,13 +37,13 @@ const ChangePassword = () => {
 
       await changePasswordSchema.validate(values, { abortEarly: false });
 
-      await api.put(`/users/${session?.id}/password`, {
-        password: values.newPassword
+      await api.put(`/users/${session?.ID}/password`, {
+        PASSWORD: values.newPassword
       });
 
       await signIn('refresh', {
-        profileId: session?.profileId,
-        token: session?.jwt,
+        profileId: session?.PROFILE_ID,
+        token: session?.JWT,
         redirect: false
       });
 
@@ -88,15 +88,15 @@ const ChangePassword = () => {
               objectFit="cover"
               quality={80}
               sizes="80px"
-              alt={session?.GUSERS.NAME || undefined}
+              alt={session?.USER.NAME || undefined}
             />
           </S.UserImageContainer>
-          <span>{session?.GUSERS.NAME}</span>
+          <span>{session?.USER.NAME}</span>
         </S.UserContent>
 
         <span>
-          Olá {session?.GUSERS.NAME}, para acessar o portal você precisa criar
-          uma nova senha!
+          Olá {session?.USER.NAME}, para acessar o portal você precisa criar uma
+          nova senha!
         </span>
 
         <S.Form onSubmit={handleSubmit} ref={formRef}>
