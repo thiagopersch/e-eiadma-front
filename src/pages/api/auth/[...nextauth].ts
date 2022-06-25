@@ -141,7 +141,7 @@ const options: NextAuthOptions = {
         }
       }
 
-      const sessionConfigs: Record<string, string | undefined> = {};
+      /* const sessionConfigs: Record<string, string | undefined> = {}; */
 
       /* try {
         const { data: schoolYear } = await api.get<SchoolYear>(

@@ -63,6 +63,6 @@ export const useGetEBD = (
   );
 };
 
-export const useCountSchools = (session?: Session | null) => {
+export const useCountEBD = (session?: Session | null) => {
   return useQuery(EBDKeys.count(JSON.stringify({})), () => countEBD(session));
 };
